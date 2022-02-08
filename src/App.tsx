@@ -1,16 +1,24 @@
 import Button, { ButtonType } from "./components/Button";
-import Menu, { MenuItem } from "./components/Menu";
+import Menu, { MenuItem , SubMenu} from "./components/Menu";
 function App() {
   return (
     <div className="App">
-      <Menu onSelect={(index) => alert(index)}>
-        <MenuItem index="0">
+      <Menu onSelect={(index) => alert(index)} mode="vertical">
+        <MenuItem>
           menu1
         </MenuItem>
-        <MenuItem disabled index="1">
+        <MenuItem disabled >
           menu2
         </MenuItem>
-        <MenuItem index="2">
+        <SubMenu title="SubMenu">
+          <MenuItem>
+            submenu1
+          </MenuItem>
+          <MenuItem disabled >
+            submenu2
+          </MenuItem>
+        </SubMenu>
+        <MenuItem >
           menu3
         </MenuItem>
       </Menu>
