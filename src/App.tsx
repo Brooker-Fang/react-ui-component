@@ -3,6 +3,25 @@ import Menu, { MenuItem , SubMenu} from "./components/Menu";
 function App() {
   return (
     <div className="App">
+      <Menu onSelect={(index) => alert(index)} >
+        <MenuItem>
+          menu1
+        </MenuItem>
+        <MenuItem disabled >
+          menu2
+        </MenuItem>
+        <SubMenu title="SubMenu">
+          <MenuItem>
+            submenu1
+          </MenuItem>
+          <MenuItem disabled >
+            submenu2
+          </MenuItem>
+        </SubMenu>
+        <MenuItem >
+          menu3
+        </MenuItem>
+      </Menu>
       <Menu onSelect={(index) => alert(index)} mode="vertical">
         <MenuItem>
           menu1
