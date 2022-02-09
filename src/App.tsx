@@ -1,8 +1,13 @@
 import Button, { ButtonType } from "./components/Button";
 import Menu, { MenuItem , SubMenu} from "./components/Menu";
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+
+library.add(fas)
 function App() {
   return (
     <div className="App">
+      
       <Menu onSelect={(index) => alert(index)} >
         <MenuItem>
           menu1
