@@ -22,7 +22,7 @@ function App() {
           menu3
         </MenuItem>
       </Menu>
-      <Menu onSelect={(index) => alert(index)} mode="vertical">
+      <Menu onSelect={(index) => alert(index)} mode="vertical" defaultOpenSubMenu={['2']}>
         <MenuItem>
           menu1
         </MenuItem>
@@ -33,7 +33,7 @@ function App() {
           <MenuItem>
             submenu1
           </MenuItem>
-          <MenuItem disabled >
+          <MenuItem >
             submenu2
           </MenuItem>
         </SubMenu>
