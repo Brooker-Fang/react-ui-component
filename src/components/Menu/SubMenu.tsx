@@ -4,7 +4,7 @@ import { FunctionComponentElement, useContext } from "react"
 import { MenuItemProps } from "."
 import Icon from "../Icon/Icon"
 import { MenuContext } from "./Menu"
-
+import Transition from "../Transition"
 export interface SubMenuProps {
   index?: string
   title: string
@@ -58,9 +58,11 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
       }
     })
     return (
-      <ul className={subMenuClasses} >
+      <Transition in={open} timeout={1000} animation="zoom-in-top">
+        <ul className={subMenuClasses} >
         {childrenComponent}
       </ul>
+      </Transition>
     )
   }
   return (

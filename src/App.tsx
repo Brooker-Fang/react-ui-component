@@ -1,10 +1,13 @@
-import Button, { ButtonType } from "./components/Button";
+import { useState } from 'react'
+import Button, { } from "./components/Button";
 import Menu, { MenuItem , SubMenu} from "./components/Menu";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
+import Transition from './components/Transition';
 
 library.add(fas)
 function App() {
+  const [show, setShow] = useState(false)
   return (
     <div className="App">
       
@@ -46,13 +49,10 @@ function App() {
           menu3
         </MenuItem>
       </Menu>
-      <code>
-        const a = b
-      </code>
-      <Button disabled >hello</Button>
-      <Button autoFocus >autoFocus</Button>
-      <Button btnType={ButtonType.Danger} >error</Button>
-      <Button  btnType={ButtonType.Link} href="https://baidu.com">百度</Button>
+      <Button size="lg" onClick={() => setShow(!show)}>Toggle</Button>
+      <Transition in={show} timeout={300} animation="zoom-in-left" wrapper>
+        <Button size="lg" >a large button</Button>
+      </Transition>
     </div>
   );
 }
