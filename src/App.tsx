@@ -4,6 +4,7 @@ import Menu, { MenuItem , SubMenu} from "./components/Menu";
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import Transition from './components/Transition';
+import Input from './components/Input';
 
 library.add(fas)
 function App() {
@@ -53,6 +54,7 @@ function App() {
       <Transition in={show} timeout={300} animation="zoom-in-left" wrapper>
         <Button size="lg" >a large button</Button>
       </Transition>
+      <Input placeholder='hhh'></Input>
     </div>
   );
 }
