@@ -21,14 +21,14 @@ export const Input: React.FC<InputProps> = (props) => {
     'input-group-prepend': !!prepend
   })
   const fixControllerValue = (value: any) => {
-    if (typeof value === "undefined" || value === "null") {
+    if (typeof value === "undefined" || value === null) {
       return ''
     }
     return value
   }
   if ("value" in props) {
     delete restProps.defaultValue
-    props.value = fixControllerValue(props.value)
+    restProps["value"] = fixControllerValue(props.value)
   }
   return (
     <div className={classes} style={style}> 

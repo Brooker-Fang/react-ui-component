@@ -5,10 +5,15 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import Transition from './components/Transition';
 import Input from './components/Input';
+import AutoComplete from './components/AutoComplete';
 
 library.add(fas)
 function App() {
   const [show, setShow] = useState(false)
+  const suggestions = ['a', 'b', 'ccc', 'cdea', 'qas', 'dashdj', 'fdhsdjkfh', 'rweorii']
+  const handleFetch = (query: string) => {
+    return suggestions.filter(item => item.includes(query))
+  }
   return (
     <div className="App">
       
@@ -55,6 +60,9 @@ function App() {
         <Button size="lg" >a large button</Button>
       </Transition>
       <Input placeholder='hhh'></Input>
+      <AutoComplete
+      fetchSuggestion={handleFetch}
+      ></AutoComplete>
     </div>
   );
 }
