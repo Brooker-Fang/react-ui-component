@@ -52,7 +52,7 @@ const TestUploadList = () => {
     return Promise.resolve(newFile)
   }
   const defaultFileList:UploadFile[] = [
-    { uid: '1', size: 100, name: 'test.txt', status: 'uploading', percent: 10 },
+    { uid: '1', size: 100, name: 'test.txt', status: 'uploading', percent: 30 },
     { uid: '12', size: 200, name: 'test.txt', status: 'success', percent: 100 },
     { uid: '13', size: 300, name: 'test.txt', status: 'error', percent: 100 },
   ]
