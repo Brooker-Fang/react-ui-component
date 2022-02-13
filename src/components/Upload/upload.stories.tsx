@@ -5,6 +5,8 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import Upload from "."
 import { UploadFile } from "./upload"
 import '../../styles/index.scss'
+import Button from "../Button"
+import Icon from "../Icon"
 
 library.add(fas)
 const SimpleUpload = () => {
@@ -14,7 +16,9 @@ const SimpleUpload = () => {
       onProgress={action('process')}
       onSuccess={action('success')}
       onError={action('error')}
-      />
+      >
+        <Button>Upload</Button>
+      </Upload>
   )
 }
 const TestBeforeUpload = () => {
@@ -30,7 +34,9 @@ const TestBeforeUpload = () => {
       action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
       onChange={action('change')}
       beforeUpload={checkFileSize}
-      />
+      >
+      <Button>Upload</Button>
+        </Upload>
   )
 }
 const TestAsyncBeforeUpload = () => {
@@ -43,14 +49,12 @@ const TestAsyncBeforeUpload = () => {
       action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
       onChange={action('change')}
       beforeUpload={filePromise}
-      />
+      >
+      <Button>Upload</Button>
+        </Upload>
   )
 }
 const TestUploadList = () => {
-  const filePromise = (file: File) => {
-    const newFile = new File([file], 'new_name.docx', {type: file.type})
-    return Promise.resolve(newFile)
-  }
   const defaultFileList:UploadFile[] = [
     { uid: '1', size: 100, name: 'test.txt', status: 'uploading', percent: 30 },
     { uid: '12', size: 200, name: 'test.txt', status: 'success', percent: 100 },
@@ -60,10 +64,30 @@ const TestUploadList = () => {
     <Upload
       action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
       onChange={action('change')}
-      beforeUpload={filePromise}
       defaultFileList={defaultFileList}
       onRemove={action('remove')}
-      />
+      name="filename"
+      data={{'key': 'value'}}
+      header={{'X-Powered-By': 'vikingship'}}
+      accept=".png"
+      multiple
+      >
+        <Button>Upload</Button>
+        </Upload>
+  )
+}
+const TestDragUpload = () => {
+  return (
+    <Upload
+      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+      onChange={action('change')}
+      onRemove={action('remove')}
+      drag
+      >
+        <Icon icon="upload" size="5x" theme="secondary" />
+      <br/>
+      <p>Drag file over to upload</p>
+        </Upload>
   )
 }
 storiesOf('Upload 组件', module)
@@ -71,3 +95,4 @@ storiesOf('Upload 组件', module)
   .add('测试beforeUpload', TestBeforeUpload)
   .add('测试异步beforeUpload', TestAsyncBeforeUpload)
   .add('测试上传文件列表', TestUploadList)
+  .add('测试拖动上传文件', TestDragUpload)
