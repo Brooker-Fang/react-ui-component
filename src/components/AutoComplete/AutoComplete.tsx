@@ -84,7 +84,7 @@ const AutoComplete:React.FC<AutoCompleteProps> = (props) => {
   }
   const generateDropdown = () => {
     return (
-      <ul>
+      <ul className="viking-suggestion-list">
         {
           suggestions.map((item, index) => {
             const cnames = classNames('suggestion-item', {
