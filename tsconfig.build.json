@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "outDir": "build", // 打包输出 位置
+    "module": "esnext", // 输出的 module类型， esnext是标准的es module
+    "target": "es5", // 指定编译为 哪个目标版本
+    "declaration": true, // 为每个js文件都生成一个.d.ts类型文件
+    "jsx": "react-jsx", // 使编译出来的文件可以用React.createElement代替 
+    "moduleResolution": "node", // 采用node 查找import引人文件的方式
+    "allowSyntheticDefaultImports": true // 支持 import default的方式
+  },
+  // 需要编译的那些文件
+  "include": [
+    "src"
+  ], 
+  // 不需要编译的那些文件
+  "exclude": [
+    "src/**/*.test.tsx",
+    "src/**/*.stories.tsx",
+  ]
+}
