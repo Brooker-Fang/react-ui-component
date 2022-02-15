@@ -1,6 +1,5 @@
-import React from 'react';
 import { storiesOf } from '@storybook/react';
-import '../../styles/index.scss'
+
 import Button, {  } from './button';
 // default
 const defaultButton = () => (<Button >default</Button>)

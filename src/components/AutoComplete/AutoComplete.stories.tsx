@@ -1,10 +1,7 @@
 import { storiesOf } from "@storybook/react"
 import AutoComplete, { DataSourceType } from "."
 import { action } from '@storybook/addon-actions'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { fas } from '@fortawesome/free-solid-svg-icons'
 
-library.add(fas)
 interface SuggestionProps {
   value: string,
   name: string

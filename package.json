@@ -45,7 +45,7 @@
     "build-css": "node-sass ./src/styles/index.scss ./dist/index.css",
     "lint": "eslint --ext js,ts,tsx src --max-warnings 5",
     "test:nowatch": "cross-env CI=true",
-    "prepublish": "npm run test:nowatch && npm run lint && npm run build"
+    "prepublishOnly": "npm run test:nowatch && npm run lint && npm run build"
   },
   "husky": {
     "hooks": {

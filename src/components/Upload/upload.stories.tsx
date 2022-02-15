@@ -1,14 +1,9 @@
 import { storiesOf } from "@storybook/react"
 import { action } from '@storybook/addon-actions'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { fas } from '@fortawesome/free-solid-svg-icons'
 import Upload from "."
 import { UploadFile } from "./upload"
-import '../../styles/index.scss'
 import Button from "../Button"
 import Icon from "../Icon"
-
-library.add(fas)
 const SimpleUpload = () => {
   return (
     <Upload
