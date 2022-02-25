@@ -1,46 +1,15 @@
-import React from "react"
-import FormContext from "./FormContext"
-import { Callbacks, FieldData, FormInstance, Store, ValidateMessages } from "./interface"
+import FieldContext from "./FormContext"
+import useForm from "./useForm"
 
-type BaseFormProps = Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'>
-
-type RenderProps = (values: Store, form: FormInstance) => JSX.Element | React.ReactNode
-
-export interface FormProps<Values = any> extends BaseFormProps {
-  initialValues?: Store
-  form?: FormInstance<Values>
-  children?: RenderProps | React.ReactNode
-  component?: false | string | React.FC<any> | React.ComponentClass<any>
-  fields?: FieldData[]
-  name?: string
-  validateMessage?: ValidateMessages
-  onValuesChange?: Callbacks<Values>
-  onFieldsChange?: Callbacks<Values>['onFieldsChange'];
-  onFinish?: Callbacks<Values>['onFinish'];
-  onFinishFailed?: Callbacks<Values>['onFinishFailed'];
-  validateTrigger?: string | string[] | false;
-  preserve?: boolean;
+interface FormProps{
+  form: any
+  onFinish: (values: any) => void
+  onFinishFailed: (error: any) => void
 }
-const Form: React.ForwardRefRenderFunction<FormInstance, FormProps> = (
-  {
-    name,
-    initialValues,
-    fields,
-    form,
-    preserve,
-    children,
-    component: Component = 'form',
-    validateMessage,
-    validateTrigger = 'onChange',
-    onValuesChange,
-    onFieldsChange,
-    onFinish,
-    onFinishFailed,
-    ...restProps
-  } : FormProps,
-  ref,
-) => {
-  const formContext: FormContextProps = React.useContext(FormContext)
-  const [formInstance] = useForm(form)
-}
+const Form: React.FC<FormProps> = (props) => {
+  const [formInstance] = useForm()
+  return (
+    <FieldContext.Provider value={formInstance}>{props.children}</FieldContext.Provider>
+  )
+} 
 export default Form

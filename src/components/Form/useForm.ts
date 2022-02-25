@@ -1,79 +1,53 @@
-import React from "react";
-import { Callbacks, FieldEntity, FieldError, FormInstance, InternalFormInstance, InternalHooks, InternalNamePath, Store, StoreValue, ValidateMessages } from "./interface";
+import { useRef } from "react"
 
-interface UpdateAction {
-  type: 'updateValue';
-  namePath: InternalNamePath;
-  value: StoreValue;
+type StoreProps =  {
+  [key in string]: any
 }
-
-interface ValidateAction {
-  type: 'validateField';
-  namePath: InternalNamePath;
-  triggerName: string;
-}
-
-export type ReducerAction = UpdateAction | ValidateAction;
-export class FormStore {
-  private formHooked: boolean = false;
-
-  private forceRootUpdate: () => void;
-
-  private subscribable: boolean = true;
-
-  private store: Store = {};
-
-  private fieldEntities: FieldEntity[] = [];
-
-  private initialValues: Store = {};
-
-  private callbacks: Callbacks = {};
-
-  private validateMessages: ValidateMessages = null;
-
-  private preserve?: boolean = null;
-
-  private lastValidatePromise: Promise<FieldError[]> = null;
-  constructor(forceRootUpdate : ()=> void) {
-    this.forceRootUpdate = forceRootUpdate
+class FormStore {
+  private store:StoreProps = {}
+  private fieldEntities: any[] = []
+  constructor() {
+    this.store = {}
+    // 组件实例
+    this.fieldEntities = []
   }
-  public getForm = (): InternalFormInstance => ({
-    getFieldValue: this.getFieldValue,
-    getFieldsValue: this.getFieldsValue,
-    getFieldError: this.getFieldError,
-    getFieldWarning: this.getFieldWarning,
-    getFieldsError: this.getFieldsError,
-    isFieldsTouched: this.isFieldsTouched,
-    isFieldTouched: this.isFieldTouched,
-    isFieldValidating: this.isFieldValidating,
-    isFieldsValidating: this.isFieldsValidating,
-    resetFields: this.resetFields,
-    setFields: this.setFields,
-    setFieldsValue: this.setFieldsValue,
-    validateFields: this.validateFields,
-    submit: this.submit,
-
-    getInternalHooks: this.getInternalHooks,
-
-  })
-  private getInternalHooks = (key: string): InternalHooks | null => {
-    if(key === HOOK_MARK)
+  setFieldEntities = (fieldEntities: any) => {
+    this.fieldEntities.push(fieldEntities)
   }
-}
-function useForm<Values = any> (form?: FormInstance<Values>): [FormInstance<Values>] {
-  const formRef = React.useRef<FormInstance>()
-  const [, forceUpdate] = React.useState({})
-  if(!formRef.current) {
-    if (form) {
-      formRef.current = form
-    } else {
-      const forceReRender = () => {
-        forceUpdate({})
-      }
-      const formStore: FormStore = new FormStore(forceReRender)
-      formRef.current = formStore.getForm()
+  getFieldValue = (name: keyof StoreProps) => {
+    return this.store[name]
+  }
+  getFieldsValue = () => {
+    return {...this.store}
+  }
+  setFieldsValue = (newStore: Partial<StoreProps>) => {
+    this.store = {
+      ...this.store,
+      ...newStore
+    }
+    this.fieldEntities.forEach((entity) => {
+      entity?.onStoreChange()
+    })
+  }
+  getForm = () => {
+    return {
+      getFieldValue: this.getFieldValue,
+      getFieldsValue: this.getFieldsValue,
+      setFieldsValue: this.setFieldsValue,
+      setFieldEntities: this.setFieldEntities
     }
   }
-  return [formRef.current]
+}
+const useForm = (form?: any) => {
+  const formRef = useRef<any>()
+  if (!formRef.current) {
+    if(form) {
+      formRef.current = form
+    } else {
+      const store = new FormStore()
+      formRef.current = store.getForm()
+    }
+  }
+  return []
 }
 export default useForm

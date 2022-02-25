@@ -26,6 +26,7 @@
     "@fortawesome/react-fontawesome": "^0.1.17",
     "axios": "^0.25.0",
     "classnames": "^2.3.1",
+    "rc-util": "^5.18.1",
     "react-transition-group": "^4.4.2",
     "web-vitals": "^2.1.4"
   },
