@@ -9,7 +9,13 @@ interface FormProps{
 const Form: React.FC<FormProps> = (props) => {
   const [formInstance] = useForm()
   return (
-    <FieldContext.Provider value={formInstance}>{props.children}</FieldContext.Provider>
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      formInstance.submit()
+    }}>
+      <FieldContext.Provider value={formInstance}>{props.children}</FieldContext.Provider>
+    </form>
+    
   )
 } 
 export default Form

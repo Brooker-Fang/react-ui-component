@@ -26,15 +26,23 @@ class FormStore {
       ...newStore
     }
     this.fieldEntities.forEach((entity) => {
-      entity?.onStoreChange()
+      Object.keys(newStore).forEach(key => {
+        if(key === entity.props.name) {
+          entity?.onStoreChange()
+        }
+      })
     })
+  }
+  submit = () => {
+
   }
   getForm = () => {
     return {
       getFieldValue: this.getFieldValue,
       getFieldsValue: this.getFieldsValue,
       setFieldsValue: this.setFieldsValue,
-      setFieldEntities: this.setFieldEntities
+      setFieldEntities: this.setFieldEntities,
+      submit: this.submit
     }
   }
 }
@@ -48,6 +56,6 @@ const useForm = (form?: any) => {
       formRef.current = store.getForm()
     }
   }
-  return []
+  return [formRef.current]
 }
 export default useForm
