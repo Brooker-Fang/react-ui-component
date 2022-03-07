@@ -1,14 +1,22 @@
 import React, { ReactElement } from "react"
-import FieldContext, { FieldContextType } from "./FormContext"
+import FieldContext from "./FormContext"
 interface Props{
   name: string
   rules?: any
 }
-class Field extends React.Component<Props, FieldContextType> {
+export interface FieldState {
+  name: string
+}
+class Field extends React.Component<Props, FieldState> {
   static contextType  = FieldContext
+  constructor(props: Props) {
+    super(props)
+    // const { initEntityValue } = this.context
+    // initEntityValue(this)
+  }
   componentDidMount() {
-    const { setFieldEntities } = this.context
-    setFieldEntities(this)
+    const { initEntityValue } = this.context
+    initEntityValue(this)
     
   }
   onStoreChange = () => {
@@ -36,28 +44,4 @@ class Field extends React.Component<Props, FieldContextType> {
     return returnChildNode
   }
 }
-// const Field: React.FC<Props> = (props) => {
-//   const {children, name} = props
-//   const context = useContext(FieldContext)
-//   const [_, forceUpdate] = useState({})
-//   const onStoreChange = () => {
-//     forceUpdate({})
-//   }
-//   console.log(context)
-//   const getControlled = () => {
-//     const { getFieldValue, setFieldsValue } = context
-//     return {
-//       value: getFieldValue(name),
-//       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-//         const newValue = e.target.value
-//         console.log(newValue)
-//         setFieldsValue({ 
-//           [name]: newValue,
-//         })
-//       }
-//     }
-//   }
-//   const returnChildNode = React.cloneElement(children as ReactElement, getControlled())
-//   return returnChildNode
-// }
 export default Field

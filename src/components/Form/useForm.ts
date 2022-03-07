@@ -11,7 +11,7 @@ class FormStore {
     // 组件实例
     this.fieldEntities = []
   }
-  setFieldEntities = (fieldEntities: any) => {
+  initEntityValue = (fieldEntities: any) => {
     this.fieldEntities.push(fieldEntities)
   }
   getFieldValue = (name: keyof StoreProps) => {
@@ -41,7 +41,7 @@ class FormStore {
       getFieldValue: this.getFieldValue,
       getFieldsValue: this.getFieldsValue,
       setFieldsValue: this.setFieldsValue,
-      setFieldEntities: this.setFieldEntities,
+      initEntityValue: this.initEntityValue,
       submit: this.submit
     }
   }
