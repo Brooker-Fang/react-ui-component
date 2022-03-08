@@ -1,4 +1,5 @@
 import { useRef } from "react"
+import { Callbacks, FormInstance, Store } from "./interface";
 
 type StoreProps =  {
   [key in string]: any
@@ -6,12 +7,16 @@ type StoreProps =  {
 class FormStore {
   private store:StoreProps = {}
   private fieldEntities: any[] = []
+  private callbacks: Callbacks = {};
   constructor() {
     this.store = {}
     // 组件实例
     this.fieldEntities = []
   }
-  initEntityValue = (fieldEntities: any) => {
+  setCallbacks = (callbacks: Callbacks) => {
+    this.callbacks = callbacks;
+  };
+  registerField = (fieldEntities: any) => {
     this.fieldEntities.push(fieldEntities)
   }
   getFieldValue = (name: keyof StoreProps) => {
@@ -20,7 +25,7 @@ class FormStore {
   getFieldsValue = () => {
     return {...this.store}
   }
-  setFieldsValue = (newStore: Partial<StoreProps>) => {
+  setFieldsValue = (newStore: Store) => {
     this.store = {
       ...this.store,
       ...newStore
@@ -34,20 +39,24 @@ class FormStore {
     })
   }
   submit = () => {
-
+    const { onFinish } = this.callbacks
+    if(onFinish) {
+      onFinish({...this.store})
+    }
   }
   getForm = () => {
     return {
       getFieldValue: this.getFieldValue,
       getFieldsValue: this.getFieldsValue,
       setFieldsValue: this.setFieldsValue,
-      initEntityValue: this.initEntityValue,
+      registerField: this.registerField,
+      setCallbacks: this.setCallbacks,
       submit: this.submit
     }
   }
 }
-const useForm = (form?: any) => {
-  const formRef = useRef<any>()
+function useForm<Values = any>(form?: FormInstance<Values>): [FormInstance<Values>] {
+  const formRef = useRef<FormInstance>()
   if (!formRef.current) {
     if(form) {
       formRef.current = form

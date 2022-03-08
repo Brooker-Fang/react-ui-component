@@ -4,29 +4,19 @@ interface Props{
   name: string
   rules?: any
 }
-export interface FieldState {
-  name: string
-}
+export interface FieldState {}
 class Field extends React.Component<Props, FieldState> {
   static contextType  = FieldContext
-  constructor(props: Props) {
-    super(props)
-    // const { initEntityValue } = this.context
-    // initEntityValue(this)
-  }
   componentDidMount() {
-    const { initEntityValue } = this.context
-    initEntityValue(this)
-    
+    const { registerField } = this.context
+    registerField(this)
   }
   onStoreChange = () => {
     this.forceUpdate()
   }
   getControlled = () => {
     const { name } = this.props
-    
     const { getFieldValue, setFieldsValue } = this.context
-    
     return {
       value: getFieldValue(name),
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +28,6 @@ class Field extends React.Component<Props, FieldState> {
     }
   }
   render() {
-    console.info('render')
     const {children} = this.props
     const returnChildNode = React.cloneElement(children as ReactElement, this.getControlled())
     return returnChildNode

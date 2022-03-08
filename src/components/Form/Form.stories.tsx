@@ -13,11 +13,11 @@ const FormStory = () => {
     console.log(err)
   }
   return <div>
-    <Form form={form} onFinish={onFinish} onFinishFailed={onFinishFailed}>
-      <Field name="name" rules={[{required: true, messages: "name must be required"}]}>
+    <Form form={form} onFinish={onFinish} onFinishFailed={onFinishFailed} initialValues={{name: 'init'}}>
+      <Field name="name" >
         <Input placeholder="Input" type="text"></Input>
       </Field>
-      <Field name="password" rules={[{required: true, messages: "password must be required"}]}>
+      <Field name="password" >
         <Input placeholder="password" type="text"></Input>
       </Field>
       <Button>Submit</Button>

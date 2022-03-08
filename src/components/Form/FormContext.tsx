@@ -1,14 +1,10 @@
 import React from "react"
-export interface FieldContextType {
-  getFieldValue: (name: string) => any
-  getFieldsValue: (name: string) => any
-  setFieldsValue: (store: any) => void
-  initEntityValue: (fields: any) => void
-}
-const FieldContext = React.createContext<FieldContextType>({
+import { Callbacks, FormInstance } from "./interface"
+const FieldContext = React.createContext<FormInstance>({
   getFieldValue: (name) => {},
-  getFieldsValue: (name) => {},
   setFieldsValue:(store) => {},
-  initEntityValue:(fieldEntities: any) => {},
+  registerField:(fieldEntities: any) => {},
+  submit: () => {},
+  setCallbacks: (callbacks: Callbacks) => {}
 })
 export default FieldContext
