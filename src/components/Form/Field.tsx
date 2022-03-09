@@ -1,8 +1,8 @@
 import React, { ReactElement } from "react"
 import FieldContext from "./FormContext"
+import { Store } from "./interface"
 interface Props{
   name: string
-  rules?: any
 }
 export interface FieldState {}
 class Field extends React.Component<Props, FieldState> {
@@ -11,8 +11,15 @@ class Field extends React.Component<Props, FieldState> {
     const { registerField } = this.context
     registerField(this)
   }
-  onStoreChange = () => {
-    this.forceUpdate()
+  onStoreChange = (prevStore: Store) => {
+    const { getFieldValue } = this.context
+    const { name } = this.props
+    const prevValue = prevStore[name]
+    const curValue = getFieldValue(name)
+    if (curValue !== prevValue) {
+      this.forceUpdate()
+      return;
+    }
   }
   getControlled = () => {
     const { name } = this.props

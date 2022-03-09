@@ -26,16 +26,13 @@ class FormStore {
     return {...this.store}
   }
   setFieldsValue = (newStore: Store) => {
+    const prevStore = {...this.store}
     this.store = {
       ...this.store,
       ...newStore
     }
     this.fieldEntities.forEach((entity) => {
-      Object.keys(newStore).forEach(key => {
-        if(key === entity.props.name) {
-          entity?.onStoreChange()
-        }
-      })
+      entity?.onStoreChange(prevStore);
     })
   }
   submit = () => {
