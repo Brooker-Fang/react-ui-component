@@ -1,46 +1,38 @@
-import { useRef } from "react"
-import { Callbacks, FormInstance, Store } from "./interface";
+import { useRef } from 'react';
+import { Callbacks, FieldEntity, FormInstance, Store } from './interface';
 
-type StoreProps =  {
-  [key in string]: any
-}
 class FormStore {
-  private store:StoreProps = {}
-  private fieldEntities: any[] = []
+  private store: Store = {};
+  private fieldEntities: FieldEntity[] = [];
   private callbacks: Callbacks = {};
-  constructor() {
-    this.store = {}
-    // 组件实例
-    this.fieldEntities = []
-  }
   setCallbacks = (callbacks: Callbacks) => {
     this.callbacks = callbacks;
   };
-  registerField = (fieldEntities: any) => {
-    this.fieldEntities.push(fieldEntities)
-  }
-  getFieldValue = (name: keyof StoreProps) => {
-    return this.store[name]
-  }
+  registerField = (fieldEntities: FieldEntity) => {
+    this.fieldEntities.push(fieldEntities);
+  };
+  getFieldValue = (name: keyof Store) => {
+    return this.store[name];
+  };
   getFieldsValue = () => {
-    return {...this.store}
-  }
+    return { ...this.store };
+  };
   setFieldsValue = (newStore: Store) => {
-    const prevStore = {...this.store}
+    const prevStore = { ...this.store };
     this.store = {
       ...this.store,
-      ...newStore
-    }
-    this.fieldEntities.forEach((entity) => {
+      ...newStore,
+    };
+    this.fieldEntities.forEach(entity => {
       entity?.onStoreChange(prevStore);
-    })
-  }
+    });
+  };
   submit = () => {
-    const { onFinish } = this.callbacks
-    if(onFinish) {
-      onFinish({...this.store})
+    const { onFinish } = this.callbacks;
+    if (onFinish) {
+      onFinish({ ...this.store });
     }
-  }
+  };
   getForm = () => {
     return {
       getFieldValue: this.getFieldValue,
@@ -48,20 +40,20 @@ class FormStore {
       setFieldsValue: this.setFieldsValue,
       registerField: this.registerField,
       setCallbacks: this.setCallbacks,
-      submit: this.submit
-    }
-  }
+      submit: this.submit,
+    };
+  };
 }
 function useForm<Values = any>(form?: FormInstance<Values>): [FormInstance<Values>] {
-  const formRef = useRef<FormInstance>()
+  const formRef = useRef<FormInstance>();
   if (!formRef.current) {
-    if(form) {
-      formRef.current = form
+    if (form) {
+      formRef.current = form;
     } else {
-      const store = new FormStore()
-      formRef.current = store.getForm()
+      const store = new FormStore();
+      formRef.current = store.getForm();
     }
   }
-  return [formRef.current]
+  return [formRef.current];
 }
-export default useForm
+export default useForm;
