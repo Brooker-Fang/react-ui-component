@@ -1,3 +1,15 @@
+
+# Antd4.0 Form表单组件实现思路
+antd4.0 Form表单主要是基于rc-filed-form组件的封装，rc-field-form源码地址：https://github.com/react-component/field-form  具体的源码就不细看了，直接进入正题。
+
+我们自己实现表单是可能是这样：
+```js
+
+```
+思路就是：
+  初始化formData作为表单的状态存储
+  将每个表单设置为受控组件，value取formData的值，监听onChange事件去改变fromData状态，即setFormData去更新数据和组件
+  
 ## rc-field-form 主要实现思路
 + 用数据仓库FormStore管理数据
 + 通过Context跨层级传递store实例，让每个表单可以通过store实例去修改、获取数据
@@ -5,10 +17,12 @@
 + 将表单组件的子元素设置为受控组件，onChange时去改变数据仓库 store 的数据
 
 ## 简单实现
+### 总体思路
+![Form思维导图](./Form思维导图.png)
 ### 实现数据仓库FormStore
-+ store存储数据，setFieldsValue、getFieldValue来设置、获取数据。当setFieldsValue设值时，遍历执行订阅组件实例的onStoreChange
-+ fieldEntities存储表单实例，订阅数据变化，当数据变化时，执行表单实例的onStoreChange方法
-+ callbacks用于存储onFinish、onFinishFailed等回调函数
++ 1、store存储数据，setFieldsValue、getFieldValue来设置、获取数据。当setFieldsValue设值时，遍历执行订阅组件实例的onStoreChange
++ 2、fieldEntities存储表单实例，订阅数据变化，当数据变化时，执行表单实例的onStoreChange方法
++ 3、callbacks用于存储onFinish、onFinishFailed等回调函数
 ```js
 class FormStore {
   private store:Store = {}
@@ -156,4 +170,4 @@ class Field extends React.Component<FieldProps, FieldState> {
 }
 export default Field;
 ```
-## 总体思路
+

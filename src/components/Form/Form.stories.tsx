@@ -1,4 +1,5 @@
 import { storiesOf } from '@storybook/react';
+import React from 'react';
 import Form, { Field } from '.';
 import Button from '../Button';
 import Input from '../Input';
@@ -31,4 +32,5 @@ const FormStory = () => {
     </div>
   );
 };
+
 storiesOf('Form', module).add('Form', FormStory);
