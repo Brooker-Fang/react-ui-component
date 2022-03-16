@@ -2,14 +2,119 @@
 # Antd4.0 Form表单组件实现思路
 antd4.0 Form表单主要是基于rc-filed-form组件的封装，rc-field-form源码地址：https://github.com/react-component/field-form  具体的源码就不细看了，直接进入正题。
 
-我们自己实现表单是可能是这样：
+如果我们自己实现表单是可能是这样：
 ```js
-
+const FormModule = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    age: null,
+  });
+  return (
+    <form>
+      <input
+        placeholder="name"
+        value={formData.name}
+        onChange={e => {
+          setFormData(prev => ({ ...prev, name: e.target.value }));
+        }}
+      ></input>
+      <input
+        placeholder="age"
+        value={formData.name}
+        onChange={e => {
+          setFormData(prev => ({ ...prev, name: e.target.value }));
+        }}
+      ></input>
+    </form>
+  );
+};
 ```
 思路就是：
-  初始化formData作为表单的状态存储
-  将每个表单设置为受控组件，value取formData的值，监听onChange事件去改变fromData状态，即setFormData去更新数据和组件
-  
+  + 初始化formData作为表单的状态存储
+  + 将每个表单设置为受控组件，value取formData的值，监听onChange事件去改变fromData状态，即setFormData去更新数据和组件  
+      
+既然要将每个表单都设置为受控组件，但每次去写value 和 onChange太麻烦，可以封装一个Field组件，将Field的子元素组件设置为受控组件
+```js
+const Field = (props) => {
+  const { children, setFormData, name, formData } = props;
+  const getControlled = () => {
+    return {
+      value: formData[name],
+      onChange: (e) => {
+        const newValue = e.target.value;
+        setFormData((prev => ({...prev, [name]: newValue})));
+      },
+    };
+  }
+  const returnChildNode = React.cloneElement(children, getControlled());
+  return returnChildNode;
+}
+
+```
+优化后为
+```js
+const FormModel = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    age: null,
+  });
+  return (
+    <form>
+      <Field name="name" form={formData} setFormData={setFormData}>
+        <input placeholder="name"></input>
+      </Field>
+      <Field name="age" form={formData} setFormData={setFormData}>
+        <input placeholder="age"></input>
+      </Field>
+    </form>
+  );
+};
+```
+看着代码干净了点，不过每次都传formData和setFormData也太麻烦了，并且Field组件可能也是嵌套在子组件里，如果嵌套层级比较深，就得一直传props到Field组件，可以用Context来优化
+```js
+const FieldContext = React.createContext({});
+class Field2 extends React.Component {
+  static contextType = FieldContext;
+  getControlled = () => {
+    const { name } = this.props;
+    const { formData, setFormData } = this.context;
+    return {
+      value: formData[name],
+      onChange: e => {
+        const newValue = e.target.value;
+        setFormData((prev) => ({ ...prev, [name]: newValue }));
+      },
+    };
+  };
+  render() {
+    const { children } = this.props;
+    const returnChildNode = React.cloneElement(children, this.getControlled());
+    return returnChildNode;
+  }
+}
+const FormModel3 = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    age: null,
+  });
+  return (
+    <form>
+      <FieldContext.Provider value={{ formData, setFormData }}>
+        <Field name="name">
+          <input placeholder="name"></input>
+        </Field>
+        <Field name="age">
+          <input placeholder="age"></input>
+        </Field>
+      </FieldContext.Provider>
+    </form>
+  );
+};
+
+```
+
+这样代码看着就舒服多了，但是性能方面还能优化一下，比如无论是修改了name还是age，都是执行最上层的setFromData，都会导致整个form更新，如果有大量表单项时则会出现性能问题。  
+可以学习下antd4.0 Form表单(即rc-field-form)的实现思路，用一个数据仓库去管理 form 的状态store，然后表单组件通过订阅store，在store更新时，让每个订阅的表单去执行更新
 ## rc-field-form 主要实现思路
 + 用数据仓库FormStore管理数据
 + 通过Context跨层级传递store实例，让每个表单可以通过store实例去修改、获取数据
@@ -171,3 +276,52 @@ class Field extends React.Component<FieldProps, FieldState> {
 export default Field;
 ```
 
+### 接口文件
+```js
+export type StoreValue = any;
+export type Store = Record<string, StoreValue>;
+export interface FieldEntity {
+  onStoreChange: (prevStore: Store) => void;
+}
+export interface FieldData {
+  touched: boolean;
+  validating: boolean;
+  errors: string[];
+  warnings: string[];
+  value: StoreValue;
+}
+export type InternalNamePath = (string | number)[];
+export interface ValidateErrorEntity<Values = any> {
+  values: Values;
+  errorFields: { name: InternalNamePath; errors: string[] }[];
+  outOfDate: boolean;
+}
+export interface Callbacks<Values = any> {
+  onValuesChange?: (changedValues: any, values: Values) => void;
+  onFieldsChange?: (changedFields: FieldData[], allFields: FieldData[]) => void;
+  onFinish?: (values: Values) => void;
+  onFinishFailed?: (errorInfo: ValidateErrorEntity<Values>) => void;
+}
+export type NamePath = string;
+export interface FormInstance<Values = any> {
+  submit: () => void;
+  setCallbacks: (callbacks: Callbacks) => void;
+  getFieldValue: (name: NamePath) => StoreValue;
+  setFieldsValue: (values: Partial<Values>) => void;
+  registerField: (fieldEntities: any) => void;
+}
+
+export interface FieldProps {
+  name: string;
+}
+export interface FieldState {}
+
+export type BaseFormProps = Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'>;
+export interface FormProps<Values = any> extends BaseFormProps {
+  initialValues?: Store;
+  form: FormInstance<Values>;
+  onFinish: (values: any) => void;
+  onFinishFailed: (error: any) => void;
+}
+
+```

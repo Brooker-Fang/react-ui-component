@@ -55,3 +55,42 @@ const FormModel2 = () => {
     </form>
   );
 };
+
+const FieldContext = React.createContext({});
+class Field2 extends React.Component {
+  static contextType = FieldContext;
+  getControlled = () => {
+    const { name } = this.props as any;
+    const { formData, setFormData } = this.context;
+    return {
+      value: formData[name],
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = e.target.value;
+        setFormData((prev: any) => ({ ...prev, [name]: newValue }));
+      },
+    };
+  };
+  render() {
+    const { children } = this.props;
+    const returnChildNode = React.cloneElement(children as ReactElement, this.getControlled());
+    return returnChildNode;
+  }
+}
+const FormModel3 = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    age: null,
+  });
+  return (
+    <form>
+      <FieldContext.Provider value={{ formData, setFormData }}>
+        <Field name="name">
+          <input placeholder="name"></input>
+        </Field>
+        <Field name="age">
+          <input placeholder="age"></input>
+        </Field>
+      </FieldContext.Provider>
+    </form>
+  );
+};
