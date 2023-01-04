@@ -26,6 +26,8 @@
     "@fortawesome/react-fontawesome": "^0.1.17",
     "axios": "^0.25.0",
     "classnames": "^2.3.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.0",
     "rc-util": "^5.18.1",
     "react-transition-group": "^4.4.2",
     "web-vitals": "^2.1.4"
@@ -33,6 +35,11 @@
   "peerDependencies": {
     "react": ">= 16.8.0",
     "react-dom": ">= 16.8.0"
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
   },
   "scripts": {
     "start": "react-scripts start",
@@ -46,12 +53,8 @@
     "build-css": "node-sass ./src/styles/index.scss ./dist/index.css",
     "lint": "eslint --ext js,ts,tsx src --max-warnings 5",
     "test:nowatch": "cross-env CI=true",
-    "prepublishOnly": "npm run test:nowatch && npm run lint && npm run build"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run test:nowatch && npm run lint"
-    }
+    "prepublishOnly": "npm run test:nowatch && npm run lint && npm run build",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -104,7 +107,6 @@
     "@types/storybook__addon-info": "^5.2.4",
     "cross-env": "^7.0.3",
     "css-loader": "^6.6.0",
-    "husky": "^7.0.4",
     "node-sass": "^7.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
